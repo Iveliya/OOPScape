@@ -3,17 +3,18 @@
 
 #include <iostream>
 #include "Board.h"
+#include "Game.h"
 
 int main()
 {
-    Board board;
+    Game game;
 
-    if (!board.loadFromFile("levels/level1.txt"))
+    if (!game.loadLevel("levels/level1.txt"))
     {
         return 1;
     }
 
-    board.print();
+    game.run();
 
     return 0;
 }

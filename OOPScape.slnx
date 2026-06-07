@@ -3,5 +3,5 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="OOPScape/OOPScape.vcxproj" />
+  <Project Path="OOPScape/OOPScape.vcxproj" Id="5c690cac-89a2-411a-a068-a746ebdc75a2" />
 </Solution>

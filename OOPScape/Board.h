@@ -25,5 +25,6 @@ public:
     Point getFinishPosition() const;
 
     const std::vector<Point>& getEnemyPositions() const;
+    const std::vector<std::string>& getMaze() const;
 };
 

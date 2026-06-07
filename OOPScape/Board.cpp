@@ -119,3 +119,8 @@ const std::vector<Point>& Board::getEnemyPositions() const
 {
     return enemyPositions;
 }
+
+const std::vector<std::string>& Board::getMaze() const
+{
+    return maze;
+}
