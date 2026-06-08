@@ -33,3 +33,8 @@ void Hero::moveDown()
 {
 	position.y++;
 }
+
+bool Hero::useAbility(const Board& board)
+{
+	return false;
+}
