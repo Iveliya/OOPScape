@@ -6,6 +6,8 @@ public:
     Enemy();
     Enemy(const Point& position);
 
+    virtual ~Enemy() = default;
+
     char getSymbol() const override;
 
 };

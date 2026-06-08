@@ -31,9 +31,16 @@ void Game::initializeEnemies()
 
     const std::vector<Point>& enemyPositions = board.getEnemyPositions();
 
-    for (const Point& position : enemyPositions)
+    for (int i = 0; i < enemyPositions.size(); i++)
     {
-        enemies.push_back(Enemy(position));
+        if (i % 2 == 0)
+        {
+            enemies.push_back(std::make_unique<Enemy>(enemyPositions[i]));
+        }
+        else
+        {
+            enemies.push_back(std::make_unique<FastEnemy>(enemyPositions[i]));
+        }
     }
 }
 
@@ -41,10 +48,10 @@ void Game::printGameState() const
 {
     std::vector<std::string> displayMaze = board.getMaze();
 
-    for (const Enemy& enemy : enemies)
+    for (const std::unique_ptr<Enemy>& enemy : enemies)
     {
-        Point enemyPosition = enemy.getPosition();
-        displayMaze[enemyPosition.y][enemyPosition.x] = enemy.getSymbol();
+        Point enemyPosition = enemy->getPosition();
+        displayMaze[enemyPosition.y][enemyPosition.x] = enemy->getSymbol();
     }
 
     Point heroPosition = hero->getPosition();
@@ -246,13 +253,28 @@ void Game::moveEnemies()
 {
     Point heroPosition = hero->getPosition();
 
-    for (Enemy& enemy : enemies)
+    for (std::unique_ptr<Enemy>& enemy : enemies)
     {
-        Point enemyPosition = enemy.getPosition();
+        int steps = 1;
 
-        if (tryMoveTowardsHeroBFS(enemyPosition, heroPosition, board))
+        if (enemy->getSymbol() == 'X')
         {
-            enemy.setPosition(enemyPosition);
+            steps = 2;
+        }
+
+        for (int i = 0; i < steps; i++)
+        {
+            Point enemyPosition = enemy->getPosition();
+
+            if (tryMoveTowardsHeroBFS(enemyPosition, heroPosition, board))
+            {
+                enemy->setPosition(enemyPosition);
+            }
+
+            if (checkLoss())
+            {
+                return;
+            }
         }
     }
 }
@@ -273,7 +295,7 @@ bool Game::attackEnemyNearHero()
 
     for (auto it = enemies.begin(); it != enemies.end(); ++it)
     {
-        Point enemyPosition = it->getPosition();
+        Point enemyPosition = (*it)->getPosition();
 
         int dx = calculateDistance(heroPosition.x, enemyPosition.x);
         int dy = calculateDistance(heroPosition.y, enemyPosition.y);
@@ -297,16 +319,15 @@ bool Game::checkWin() const
 bool Game::checkLoss() const
 {
     Point heroPosition = hero->getPosition();
-    for (const Enemy& e : enemies)
+    for (const std::unique_ptr<Enemy>& enemy : enemies)
     {
-        Point enemyPosition = e.getPosition();
+        Point enemyPosition = enemy->getPosition();
 
-        if (enemyPosition.x == heroPosition.x && 
+        if (enemyPosition.x == heroPosition.x &&
             enemyPosition.y == heroPosition.y)
         {
             return true;
         }
-
     }
     return false;
 }

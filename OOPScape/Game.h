@@ -1,14 +1,16 @@
 #pragma once
 #include <memory>
+#include <vector>
 #include "Board.h"
 #include "Hero.h"
 #include "Enemy.h"
+#include "FastEnemy.h"
 class Game
 {
 private:
     Board board;
     std::unique_ptr<Hero> hero;
-    std::vector<Enemy> enemies;
+    std::vector<std::unique_ptr<Enemy>> enemies;
 
     bool isGameOver;
     bool isWin;
