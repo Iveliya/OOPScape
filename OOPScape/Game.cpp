@@ -2,6 +2,7 @@
 #include <iostream>
 #include <queue>
 #include "Wizard.h"
+#include "Knight.h"
 
 void Game::initializeEnemies()
 {
@@ -38,6 +39,23 @@ void Game::processCommand(const std::string& command)
 {
     if (command == "OOP" || command == "oop")
     {
+
+        Knight* knight = dynamic_cast<Knight*>(hero.get());
+
+        if (knight)
+        {
+            if (attackEnemyNearHero())
+            {
+                std::cout << "Enemy defeated!" << std::endl;
+            }
+            else
+            {
+                std::cout << "No enemy nearby!" << std::endl;
+            }
+
+            return;
+        }
+
         std::string direction;
 
         std::cout << "Enter teleport direction (L/R/U/D): ";
@@ -52,13 +70,6 @@ void Game::processCommand(const std::string& command)
             std::cout << "Ability failed!" << std::endl;
         }
 
-        if (checkWin())
-        {
-            isGameOver = true;
-            isWin = true;
-            return;
-        }
-
         moveEnemies();
 
         if (checkLoss())
@@ -68,6 +79,7 @@ void Game::processCommand(const std::string& command)
         }
 
         return;
+        
     }
 
     Point currentPosition = hero->getPosition();
@@ -224,6 +236,37 @@ void Game::moveEnemies()
     }
 }
 
+int Game::calculateDistance(int first, int second) const
+{
+    if (first > second)
+    {
+        return first - second;
+    }
+
+    return second - first;
+}
+
+bool Game::attackEnemyNearHero()
+{
+    Point heroPosition = hero->getPosition();
+
+    for (auto it = enemies.begin(); it != enemies.end(); ++it)
+    {
+        Point enemyPosition = it->getPosition();
+
+        int dx = calculateDistance(heroPosition.x, enemyPosition.x);
+        int dy = calculateDistance(heroPosition.y, enemyPosition.y);
+
+        if ((dx == 1 && dy == 0) || (dx == 0 && dy == 1))
+        {
+            enemies.erase(it);
+            return true;
+        }
+    }
+
+    return false;
+}
+
 bool Game::checkWin() const
 {
     return hero->getPosition().x == board.getFinishPosition().x
@@ -249,7 +292,7 @@ bool Game::checkLoss() const
 
 Game::Game()
 {
-    hero = std::make_unique<Wizard>();
+    hero = std::make_unique<Knight>();
     isGameOver = false;
     isWin = false;
 }

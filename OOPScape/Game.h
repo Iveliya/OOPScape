@@ -21,6 +21,9 @@ private:
 
     void moveEnemies();
 
+    int calculateDistance(int first, int second) const;
+    bool attackEnemyNearHero();
+
     bool checkWin() const;
     bool checkLoss() const;
 public:
