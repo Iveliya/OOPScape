@@ -62,6 +62,18 @@ void Game::processCommand(char command)
     }
 
     moveHeroTo(newPosition);
+
+    if (checkWin())
+    {
+        isGameOver = true;
+        isWin = true;
+    }
+    else if (checkLoss())
+    {
+        isGameOver = true;
+        isWin = false;
+    }
+
 }
 
 void Game::moveHeroTo(const Point& newPosition)
@@ -78,11 +90,24 @@ void Game::moveHeroTo(const Point& newPosition)
 
 bool Game::checkWin() const
 {
-    return false;
+    return hero.getPosition().x == board.getFinishPosition().x
+        && hero.getPosition().y == board.getFinishPosition().y;
 }
 
 bool Game::checkLoss() const
 {
+    Point heroPosition = hero.getPosition();
+    for (const Enemy& e : enemies)
+    {
+        Point enemyPosition = e.getPosition();
+
+        if (enemyPosition.x == heroPosition.x && 
+            enemyPosition.y == heroPosition.y)
+        {
+            return true;
+        }
+
+    }
     return false;
 }
 
@@ -121,4 +146,14 @@ void Game::run()
 
         processCommand(command);
     }
+
+    if (isWin)
+    {
+        std::cout << "You win!" << std::endl;
+    }
+    else
+    {
+        std::cout << "You lose!" << std::endl;
+    }
 }
+
