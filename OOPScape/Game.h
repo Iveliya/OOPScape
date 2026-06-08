@@ -13,6 +13,8 @@ private:
     bool isGameOver;
     bool isWin;
 
+    void chooseHero();
+
     void initializeEnemies();
     void printGameState() const;
 

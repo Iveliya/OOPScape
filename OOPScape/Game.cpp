@@ -4,6 +4,27 @@
 #include "Wizard.h"
 #include "Knight.h"
 
+void Game::chooseHero()
+{
+    int choice;
+
+    std::cout << "Choose hero:" << std::endl;
+    std::cout << "1. Wizard" << std::endl;
+    std::cout << "2. Knight" << std::endl;
+    std::cout << "Choice: ";
+
+    std::cin >> choice;
+
+    if (choice == 1)
+    {
+        hero = std::make_unique<Wizard>();
+    }
+    else
+    {
+        hero = std::make_unique<Knight>();
+    }
+}
+
 void Game::initializeEnemies()
 {
     enemies.clear();
@@ -292,7 +313,7 @@ bool Game::checkLoss() const
 
 Game::Game()
 {
-    hero = std::make_unique<Knight>();
+    chooseHero();
     isGameOver = false;
     isWin = false;
 }
@@ -323,8 +344,15 @@ void Game::run()
         std::string command;
 		std::cout << "Enter command (L/R/U/D for movement, OOP for ability): ";
         std::cin >> command;
-
-        processCommand(command);
+		if (command != "L" && command != "R" && command != "U" && command != "D" && command != "OOP" &&
+			command != "l" && command != "r" && command != "u" && command != "d" && command != "oop")
+		{
+			std::cout << "Invalid command!" << std::endl;
+			continue;
+		}
+        else {
+            processCommand(command);
+        }
     }
 
     if (isWin)
