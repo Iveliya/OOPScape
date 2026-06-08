@@ -36,10 +36,44 @@ void Game::printGameState() const
 
 void Game::processCommand(char command)
 {
+    Point currentPosition = hero.getPosition();
+    Point newPosition = currentPosition;
+
+    if (command == 'L' || command == 'l')
+    {
+        newPosition.x--;
+    }
+    else if (command == 'R' || command == 'r')
+    {
+        newPosition.x++;
+    }
+    else if (command == 'U' || command == 'u')
+    {
+        newPosition.y--;
+    }
+    else if (command == 'D' || command == 'd')
+    {
+        newPosition.y++;
+    }
+    else
+    {
+        std::cout << "Invalid command!" << std::endl;
+        return;
+    }
+
+    moveHeroTo(newPosition);
 }
 
 void Game::moveHeroTo(const Point& newPosition)
 {
+    if (board.isWalkable(newPosition.x, newPosition.y))
+    {
+        hero.setPosition(newPosition);
+    }
+    else
+    {
+        std::cout << "You cannot move there!" << std::endl;
+    }
 }
 
 bool Game::checkWin() const
