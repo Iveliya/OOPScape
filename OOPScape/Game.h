@@ -18,6 +18,8 @@ private:
     void processCommand(char command);
     void moveHeroTo(const Point& newPosition);
 
+    void moveEnemies();
+
     bool checkWin() const;
     bool checkLoss() const;
 public:

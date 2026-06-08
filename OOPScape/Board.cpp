@@ -44,6 +44,7 @@ bool Board::loadFromFile(const std::string& filename)
             {
                 startPosition = { col, row };
                 startCount++;
+                line[col] = ' ';
             }
             else if (symbol == 'F')
             {
@@ -53,6 +54,7 @@ bool Board::loadFromFile(const std::string& filename)
             else if (symbol == 'E')
             {
                 enemyPositions.push_back({ col, row });
+                line[col] = ' ';
             }
         }
         maze.push_back(line);

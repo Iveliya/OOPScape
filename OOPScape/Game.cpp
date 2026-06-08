@@ -1,5 +1,6 @@
 #include "Game.h"
 #include <iostream>
+#include <queue>
 
 void Game::initializeEnemies()
 {
@@ -17,16 +18,14 @@ void Game::printGameState() const
 {
     std::vector<std::string> displayMaze = board.getMaze();
 
-    Point heroPosition = hero.getPosition();
-
-    displayMaze[heroPosition.y][heroPosition.x] = hero.getSymbol();
-
     for (const Enemy& enemy : enemies)
     {
         Point enemyPosition = enemy.getPosition();
-
         displayMaze[enemyPosition.y][enemyPosition.x] = enemy.getSymbol();
     }
+
+    Point heroPosition = hero.getPosition();
+    displayMaze[heroPosition.y][heroPosition.x] = hero.getSymbol();
 
     for (const std::string& row : displayMaze)
     {
@@ -67,8 +66,19 @@ void Game::processCommand(char command)
     {
         isGameOver = true;
         isWin = true;
+        return;
     }
-    else if (checkLoss())
+
+    if (checkLoss())
+    {
+        isGameOver = true;
+        isWin = false;
+        return;
+    }
+
+    moveEnemies();
+
+    if (checkLoss())
     {
         isGameOver = true;
         isWin = false;
@@ -85,6 +95,97 @@ void Game::moveHeroTo(const Point& newPosition)
     else
     {
         std::cout << "You cannot move there!" << std::endl;
+    }
+}
+bool tryMoveTowardsHeroBFS(Point& enemyPosition, const Point& heroPosition, const Board& board)
+{
+    int n = board.getSize();
+    int width = n;
+
+    std::vector<int> parent(width * width, -1);
+    std::queue<Point> queue;
+
+    int start = enemyPosition.y * width + enemyPosition.x;
+    int goal = heroPosition.y * width + heroPosition.x;
+
+    parent[start] = start;
+    queue.push(enemyPosition);
+
+    const int dx[4] = { -1, 1, 0, 0 };
+    const int dy[4] = { 0, 0, -1, 1 };
+
+    bool found = false;
+
+    while (!queue.empty())
+    {
+        Point current = queue.front();
+        queue.pop();
+
+        int currentIndex = current.y * width + current.x;
+
+        if (currentIndex == goal)
+        {
+            found = true;
+            break;
+        }
+
+        for (int i = 0; i < 4; i++)
+        {
+            int nextX = current.x + dx[i];
+            int nextY = current.y + dy[i];
+
+            if (!board.isWalkable(nextX, nextY))
+            {
+                continue;
+            }
+
+            int nextIndex = nextY * width + nextX;
+
+            if (parent[nextIndex] != -1)
+            {
+                continue;
+            }
+
+            parent[nextIndex] = currentIndex;
+            queue.push(Point{ nextX, nextY });
+        }
+    }
+
+    if (!found)
+    {
+        return false;
+    }
+
+    int current = goal;
+
+    while (parent[current] != start && current != start)
+    {
+        current = parent[current];
+    }
+
+    if (current == start)
+    {
+        return false;
+    }
+
+    enemyPosition.x = current % width;
+    enemyPosition.y = current / width;
+
+    return true;
+}
+
+void Game::moveEnemies()
+{
+    Point heroPosition = hero.getPosition();
+
+    for (Enemy& enemy : enemies)
+    {
+        Point enemyPosition = enemy.getPosition();
+
+        if (tryMoveTowardsHeroBFS(enemyPosition, heroPosition, board))
+        {
+            enemy.setPosition(enemyPosition);
+        }
     }
 }
 
