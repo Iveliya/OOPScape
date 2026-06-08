@@ -14,3 +14,8 @@ char FastEnemy::getSymbol() const
 {
     return 'X';
 }
+
+int FastEnemy::getMoveCount() const
+{
+    return 2;
+}

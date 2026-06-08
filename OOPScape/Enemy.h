@@ -9,6 +9,7 @@ public:
     virtual ~Enemy() = default;
 
     char getSymbol() const override;
+    virtual int getMoveCount() const;
 
 };
 

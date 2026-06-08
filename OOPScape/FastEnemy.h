@@ -8,5 +8,6 @@ public:
     FastEnemy(const Point& position);
 
     char getSymbol() const override;
+    int getMoveCount() const override;
 };
 

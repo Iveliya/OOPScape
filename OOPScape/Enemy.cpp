@@ -13,3 +13,8 @@ char Enemy::getSymbol() const
 {
     return 'E';
 }
+
+int Enemy::getMoveCount() const
+{
+    return 1;
+}

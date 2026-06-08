@@ -255,12 +255,7 @@ void Game::moveEnemies()
 
     for (std::unique_ptr<Enemy>& enemy : enemies)
     {
-        int steps = 1;
-
-        if (enemy->getSymbol() == 'X')
-        {
-            steps = 2;
-        }
+        int steps = enemy->getMoveCount();
 
         for (int i = 0; i < steps; i++)
         {
