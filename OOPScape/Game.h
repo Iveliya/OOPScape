@@ -16,7 +16,7 @@ private:
     void initializeEnemies();
     void printGameState() const;
 
-    void processCommand(char command);
+    void processCommand(const std::string& command);
     void moveHeroTo(const Point& newPosition);
 
     void moveEnemies();

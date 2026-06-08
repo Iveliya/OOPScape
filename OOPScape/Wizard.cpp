@@ -15,11 +15,35 @@ char Wizard::getSymbol() const
     return 'W';
 }
 
-bool Wizard::teleport(const Board& board)
+bool Wizard::useAbility(const Board& board, const std::string& direction)
+{
+    return teleport(board, direction);
+}
+
+bool Wizard::teleport(const Board& board, const std::string& direction)
 {
     Point newPosition = position;
 
-    newPosition.x += 2;
+    if (direction == "R" || direction == "r")
+    {
+        newPosition.x += 2;
+    }
+    else if (direction == "L" || direction == "l")
+    {
+        newPosition.x -= 2;
+    }
+    else if (direction == "U" || direction == "u")
+    {
+        newPosition.y -= 2;
+    }
+    else if (direction == "D" || direction == "d")
+    {
+        newPosition.y += 2;
+    }
+    else
+    {
+        return false;
+    }
 
     if (board.isWalkable(newPosition.x, newPosition.y))
     {
@@ -28,9 +52,4 @@ bool Wizard::teleport(const Board& board)
     }
 
     return false;
-}
-
-bool Wizard::useAbility(const Board& board)
-{
-    return teleport(board);
 }

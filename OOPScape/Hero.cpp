@@ -34,7 +34,7 @@ void Hero::moveDown()
 	position.y++;
 }
 
-bool Hero::useAbility(const Board& board)
+bool Hero::useAbility(const Board& board, const std::string& direction)
 {
 	return false;
 }

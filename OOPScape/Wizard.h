@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 #include "Hero.h"
 #include "Board.h"
 
@@ -10,7 +11,7 @@ public:
 
     char getSymbol() const override;
 
-    bool teleport(const Board& board);
-    bool useAbility(const Board& board) override;
+    bool teleport(const Board& board, const std::string& direction);
+    bool useAbility(const Board& board, const std::string& direction) override;
 };
 

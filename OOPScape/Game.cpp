@@ -1,6 +1,7 @@
 #include "Game.h"
 #include <iostream>
 #include <queue>
+#include "Wizard.h"
 
 void Game::initializeEnemies()
 {
@@ -24,8 +25,8 @@ void Game::printGameState() const
         displayMaze[enemyPosition.y][enemyPosition.x] = enemy.getSymbol();
     }
 
-    Point heroPosition = hero.getPosition();
-    displayMaze[heroPosition.y][heroPosition.x] = hero.getSymbol();
+    Point heroPosition = hero->getPosition();
+    displayMaze[heroPosition.y][heroPosition.x] = hero->getSymbol();
 
     for (const std::string& row : displayMaze)
     {
@@ -33,24 +34,58 @@ void Game::printGameState() const
     }
 }
 
-void Game::processCommand(char command)
+void Game::processCommand(const std::string& command)
 {
-    Point currentPosition = hero.getPosition();
+    if (command == "OOP" || command == "oop")
+    {
+        std::string direction;
+
+        std::cout << "Enter teleport direction (L/R/U/D): ";
+        std::cin >> direction;
+
+        if (hero->useAbility(board, direction))
+        {
+            std::cout << "Ability used successfully!" << std::endl;
+        }
+        else
+        {
+            std::cout << "Ability failed!" << std::endl;
+        }
+
+        if (checkWin())
+        {
+            isGameOver = true;
+            isWin = true;
+            return;
+        }
+
+        moveEnemies();
+
+        if (checkLoss())
+        {
+            isGameOver = true;
+            isWin = false;
+        }
+
+        return;
+    }
+
+    Point currentPosition = hero->getPosition();
     Point newPosition = currentPosition;
 
-    if (command == 'L' || command == 'l')
+    if (command == "L" || command == "l")
     {
         newPosition.x--;
     }
-    else if (command == 'R' || command == 'r')
+    else if (command == "R" || command == "r")
     {
         newPosition.x++;
     }
-    else if (command == 'U' || command == 'u')
+    else if (command == "U" || command == "u")
     {
         newPosition.y--;
     }
-    else if (command == 'D' || command == 'd')
+    else if (command == "D" || command == "d")
     {
         newPosition.y++;
     }
@@ -90,7 +125,7 @@ void Game::moveHeroTo(const Point& newPosition)
 {
     if (board.isWalkable(newPosition.x, newPosition.y))
     {
-        hero.setPosition(newPosition);
+        hero->setPosition(newPosition);
     }
     else
     {
@@ -176,7 +211,7 @@ bool tryMoveTowardsHeroBFS(Point& enemyPosition, const Point& heroPosition, cons
 
 void Game::moveEnemies()
 {
-    Point heroPosition = hero.getPosition();
+    Point heroPosition = hero->getPosition();
 
     for (Enemy& enemy : enemies)
     {
@@ -191,13 +226,13 @@ void Game::moveEnemies()
 
 bool Game::checkWin() const
 {
-    return hero.getPosition().x == board.getFinishPosition().x
-        && hero.getPosition().y == board.getFinishPosition().y;
+    return hero->getPosition().x == board.getFinishPosition().x
+        && hero->getPosition().y == board.getFinishPosition().y;
 }
 
 bool Game::checkLoss() const
 {
-    Point heroPosition = hero.getPosition();
+    Point heroPosition = hero->getPosition();
     for (const Enemy& e : enemies)
     {
         Point enemyPosition = e.getPosition();
@@ -214,6 +249,7 @@ bool Game::checkLoss() const
 
 Game::Game()
 {
+    hero = std::make_unique<Wizard>();
     isGameOver = false;
     isWin = false;
 }
@@ -225,7 +261,7 @@ bool Game::loadLevel(const std::string& filename)
         return false;
     }
 
-    hero.setPosition(board.getStartPosition());
+    hero->setPosition(board.getStartPosition());
 
     initializeEnemies();
 
@@ -241,8 +277,8 @@ void Game::run()
     {
         printGameState();
 
-        char command;
-        std::cout << "Enter command: ";
+        std::string command;
+		std::cout << "Enter command (L/R/U/D for movement, OOP for ability): ";
         std::cin >> command;
 
         processCommand(command);

@@ -1,6 +1,7 @@
 #pragma once
 #include "Character.h"
 #include "Board.h"
+#include <string>
 
 class Hero:public Character
 {
@@ -15,6 +16,6 @@ public:
     void moveUp();
     void moveDown();
 
-    virtual bool useAbility(const Board& board);
+    virtual bool useAbility(const Board& board, const std::string& direction);
 };
 
