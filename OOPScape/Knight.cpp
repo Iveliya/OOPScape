@@ -15,6 +15,11 @@ char Knight::getSymbol() const
     return 'K';
 }
 
+bool Knight::isKnight() const
+{
+    return true;
+}
+
 bool Knight::useAbility(const Board& board, const std::string& direction)
 {
     return false;

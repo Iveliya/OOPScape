@@ -34,6 +34,11 @@ void Hero::moveDown()
 	position.y++;
 }
 
+bool Hero::isKnight() const
+{
+	return false;
+}
+
 bool Hero::useAbility(const Board& board, const std::string& direction)
 {
 	return false;

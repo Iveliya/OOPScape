@@ -9,6 +9,7 @@ public:
 
     char getSymbol() const override;
 
+    bool isKnight() const override;
     bool useAbility(const Board& board, const std::string& direction) override;
 };
 

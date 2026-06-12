@@ -68,9 +68,7 @@ void Game::processCommand(const std::string& command)
     if (command == "OOP" || command == "oop")
     {
 
-        Knight* knight = dynamic_cast<Knight*>(hero.get());
-
-        if (knight)
+        if (hero->isKnight())
         {
             if (attackEnemyNearHero())
             {
@@ -370,6 +368,10 @@ void Game::run()
             processCommand(command);
         }
     }
+
+    std::cout << std::endl;
+    std::cout << "Final board state:" << std::endl;
+    printGameState();
 
     if (isWin)
     {

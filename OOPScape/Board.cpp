@@ -44,7 +44,6 @@ bool Board::loadFromFile(const std::string& filename)
             {
                 startPosition = { col, row };
                 startCount++;
-                line[col] = ' ';
             }
             else if (symbol == 'F')
             {

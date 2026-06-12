@@ -16,6 +16,7 @@ public:
     void moveUp();
     void moveDown();
 
+    virtual bool isKnight() const;
     virtual bool useAbility(const Board& board, const std::string& direction);
 };
 
