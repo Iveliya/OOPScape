@@ -121,11 +121,15 @@ void Game::processCommand(const std::string& command)
         {
             if (attackEnemyNearHero())
             {
+                setColor(10);
                 std::cout << "Enemy defeated!" << std::endl;
+                setColor(7);
             }
             else
             {
+                setColor(14);
                 std::cout << "No enemy nearby!" << std::endl;
+                setColor(7);
             }
 
             return;
@@ -138,11 +142,15 @@ void Game::processCommand(const std::string& command)
 
         if (hero->useAbility(board, direction))
         {
+            setColor(10);
             std::cout << "Ability used successfully!" << std::endl;
+            setColor(7);
         }
         else
         {
+            setColor(12);
             std::cout << "Ability failed!" << std::endl;
+            setColor(7);
         }
 
         moveEnemies();
@@ -178,7 +186,9 @@ void Game::processCommand(const std::string& command)
     }
     else
     {
+        setColor(12);
         std::cout << "Invalid command!" << std::endl;
+        setColor(7);
         return;
     }
 
@@ -216,7 +226,9 @@ void Game::moveHeroTo(const Point& newPosition)
     }
     else
     {
+        setColor(12);
         std::cout << "You cannot move there!" << std::endl;
+        setColor(7);
     }
 }
 bool tryMoveTowardsHeroBFS(Point& enemyPosition, const Point& heroPosition, const Board& board)
@@ -410,7 +422,9 @@ void Game::run()
 		if (command != "L" && command != "R" && command != "U" && command != "D" && command != "OOP" &&
 			command != "l" && command != "r" && command != "u" && command != "d" && command != "oop")
 		{
+            setColor(12);
 			std::cout << "Invalid command!" << std::endl;
+            setColor(7);
 			continue;
 		}
         else {
@@ -419,16 +433,22 @@ void Game::run()
     }
 
     std::cout << std::endl;
+    setColor(14);
     std::cout << "Final board state:" << std::endl;
+    setColor(7);
     printGameState();
 
     if (isWin)
     {
+        setColor(10);
         std::cout << "You win!" << std::endl;
+        setColor(7);
     }
     else
     {
+        setColor(12);
         std::cout << "You lose!" << std::endl;
+        setColor(7);
     }
 }
 
