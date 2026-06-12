@@ -1,3 +1,4 @@
+#include <windows.h>
 #include "Game.h"
 #include <iostream>
 #include <queue>
@@ -47,6 +48,11 @@ void Game::initializeEnemies()
     }
 }
 
+void setColor(int color)
+{
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
+}
+
 void Game::printGameState() const
 {
     std::vector<std::string> displayMaze = board.getMaze();
@@ -62,8 +68,48 @@ void Game::printGameState() const
 
     for (const std::string& row : displayMaze)
     {
-        std::cout << row << std::endl;
+        for (char cell : row)
+        {
+            if (cell == '*')
+            {
+                setColor(8); 
+            }
+            else if (cell == 'S')
+            {
+                setColor(11); 
+            }
+            else if (cell == 'F')
+            {
+                setColor(14); 
+            }
+            else if (cell == 'W')
+            {
+                setColor(10); 
+            }
+            else if (cell == 'K')
+            {
+                setColor(10); 
+            }
+            else if (cell == 'E')
+            {
+                setColor(12); 
+            }
+            else if (cell == 'X')
+            {
+                setColor(13); 
+            }
+            else
+            {
+                setColor(7); 
+            }
+
+            std::cout << cell;
+        }
+
+        std::cout << std::endl;
     }
+
+    setColor(7);
 }
 
 void Game::processCommand(const std::string& command)
