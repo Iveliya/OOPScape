@@ -19,9 +19,12 @@ void Game::chooseHero()
     {
         hero = std::make_unique<Wizard>();
     }
-    else
+	else if (choice == 2)
     {
         hero = std::make_unique<Knight>();
+    }
+    else {
+		std::cout << "Invalid hero choice!"<<std::endl;
     }
 }
 
